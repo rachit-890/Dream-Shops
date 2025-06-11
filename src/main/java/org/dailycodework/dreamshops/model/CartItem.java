@@ -9,13 +9,12 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class CartItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,14 +22,12 @@ public class CartItem {
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 
-   @ManyToOne
-           //(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-   @JsonIgnore
-    @ManyToOne
-            //(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
@@ -38,4 +35,6 @@ public class CartItem {
         this.totalPrice = this.unitPrice.multiply(new BigDecimal(quantity));
 
     }
+
+
 }

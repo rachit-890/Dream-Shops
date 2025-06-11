@@ -26,4 +26,8 @@ public class Order {
 
     @OneToMany(mappedBy = "orderItem",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
