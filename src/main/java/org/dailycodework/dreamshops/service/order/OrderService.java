@@ -1,6 +1,7 @@
 package org.dailycodework.dreamshops.service.order;
 
 import lombok.RequiredArgsConstructor;
+import org.dailycodework.dreamshops.dto.OrderDto;
 import org.dailycodework.dreamshops.enums.OrderStatus;
 import org.dailycodework.dreamshops.exception.ResourceNotFoundException;
 import org.dailycodework.dreamshops.model.Cart;
@@ -10,6 +11,7 @@ import org.dailycodework.dreamshops.model.Product;
 import org.dailycodework.dreamshops.repository.OrderRepository;
 import org.dailycodework.dreamshops.repository.ProductRepository;
 import org.dailycodework.dreamshops.service.cart.CartService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,6 +26,7 @@ public class OrderService implements IOrderService {
     private  final OrderRepository orderRepository;
     private  final ProductRepository productRepository;
     private final CartService cartService;
+    private final ModelMapper modelMapper;
 
     @Override
     public Order placeOrder(Long userId) {
@@ -70,13 +73,18 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order getOrder(Long id) {
+    public OrderDto getOrder(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Order not found"));
+                .map(this :: convertToDto)
+                .orElseThrow(()-> new ResourceNotFoundException("Order not found"));
     }
 
     @Override
     public List<Order> getUserOrders(Long userId){
         return orderRepository.findByUserId(userId);
+    }
+
+    private OrderDto convertToDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
     }
 }

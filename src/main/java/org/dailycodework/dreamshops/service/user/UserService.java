@@ -1,12 +1,15 @@
 package org.dailycodework.dreamshops.service.user;
 
 import lombok.RequiredArgsConstructor;
+import org.dailycodework.dreamshops.exception.AlreadyExitsException;
 import org.dailycodework.dreamshops.exception.ResourceNotFoundException;
 import org.dailycodework.dreamshops.model.User;
 import org.dailycodework.dreamshops.repository.UserRepository;
 import org.dailycodework.dreamshops.request.CreateUserRequest;
 import org.dailycodework.dreamshops.request.UserUpdateRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +23,16 @@ public class UserService implements IUserService{
 
     @Override
     public User createUser(CreateUserRequest request) {
-        return null;
+        return Optional.of(request)
+                .filter(user->!userRepository.existsByEmail(request.getEmail()))
+                .map(req->{
+                    User user=new User();
+                    user.setFirstName(req.getFirstName());
+                    user.setLastName(req.getLastName());
+                    user.setEmail(req.getEmail());
+                    user.setPassword(req.getPassword());
+                    return userRepository.save(user);
+                }).orElseThrow(()->new AlreadyExitsException("OOPS "+request.getEmail()+"already exists!"));
     }
 
     @Override
@@ -32,6 +44,10 @@ public class UserService implements IUserService{
 
     @Override
     public User updateUser(UserUpdateRequest request, Long userId) {
-        return null;
+        return userRepository.findById(userId).map(existingUser->{
+            existingUser.setFirstName(request.getFirstName());
+            existingUser.setLastName(request.getLastName());
+            return userRepository.save(existingUser);
+        }).orElseThrow(()->new ResourceNotFoundException("User not found!"));
     }
 }
