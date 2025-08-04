@@ -1,5 +1,7 @@
 package org.dailycodework.dreamshops.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.dailycodework.dreamshops.dto.OrderDto;
 import org.dailycodework.dreamshops.exception.ResourceNotFoundException;
@@ -16,12 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/orders")
+@Tag(name = "Orders", description = "Operations about orders")
 public class OrderController {
 
     private final IOrderService orderService;
 
 
     @PostMapping("/order")
+    @Operation(summary = "Create order", description = "Create order")
     public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId){
         try {
             Order order=orderService.placeOrder(userId);
@@ -35,6 +39,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/order")
+    @Operation(summary = "Get order by id", description = "Get order by id")
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId){
         try {
            OrderDto order=orderService.getOrder(orderId);
@@ -46,6 +51,7 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/orders")
+    @Operation(summary = "Get orders by user id", description = "Get orders by user id")
     public ResponseEntity<ApiResponse> getUsersOrders(@PathVariable Long userId){
         try {
             List<OrderDto> orders=orderService.getUserOrders(userId);

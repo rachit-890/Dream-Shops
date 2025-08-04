@@ -1,5 +1,7 @@
 package org.dailycodework.dreamshops.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.dailycodework.dreamshops.exception.ResourceNotFoundException;
 import org.dailycodework.dreamshops.model.Cart;
@@ -15,10 +17,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/carts")
+@Tag(name = "Carts", description = "Operations about carts")
 public class CartController {
     private final ICartService cartService;
 
     @GetMapping("/{cartId}/cart")
+    @Operation(summary = "Get cart by id", description = "Get cart by id")
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
@@ -29,6 +33,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{cartId}/clear")
+    @Operation(summary = "Clear cart by id", description = "Clear cart by id")
     public ResponseEntity<ApiResponse> clearCart(@PathVariable Long cartId) {
         try {
             cartService.clearCart(cartId);
@@ -39,6 +44,7 @@ public class CartController {
     }
 
     @GetMapping("/{cartId}/cart/total_price")
+    @Operation(summary = "Get total price of cart by id", description = "Get total price of cart by id")
     public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) {
         try {
             BigDecimal totalPrice = cartService.getTotalPrice(cartId);

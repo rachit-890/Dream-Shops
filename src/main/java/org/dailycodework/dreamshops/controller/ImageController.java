@@ -1,5 +1,7 @@
 package org.dailycodework.dreamshops.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.dailycodework.dreamshops.dto.ImageDto;
 import org.dailycodework.dreamshops.exception.ResourceNotFoundException;
@@ -24,12 +26,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/images")
+@Tag( name = "Images", description = "Operations about images")
 public class ImageController {
 
     private final IImageService imageService;
 
     @PostMapping("/upload")
-
+    @Operation(summary = "Upload images", description = "Upload images")
     public ResponseEntity<ApiResponse> saveImage(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
         try {
             List<ImageDto> imageDtos = imageService.saveImage(files, productId);
@@ -41,6 +44,7 @@ public class ImageController {
 
     @GetMapping("/image/download/{imageId}")
     @Transactional
+    @Operation(summary = "Download image", description = "Download image")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image=imageService.getImageById(imageId);
         ByteArrayResource resource= new ByteArrayResource(image.getImage().getBytes(1,(int) image.getImage().length()));
@@ -50,6 +54,7 @@ public class ImageController {
     }
 
     @PutMapping("/image/{imageId}/update")
+    @Operation(summary = "Update image", description = "Update image")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId,@RequestBody MultipartFile file) {
         try {
             Image image=imageService.getImageById(imageId);
@@ -64,6 +69,7 @@ public class ImageController {
     }
 
     @DeleteMapping("/image/{imageId}/delete")
+    @Operation(summary = "Delete image", description = "Delete image")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
             Image image=imageService.getImageById(imageId);

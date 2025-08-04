@@ -1,5 +1,7 @@
 package org.dailycodework.dreamshops.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.dailycodework.dreamshops.dto.ProductDto;
 import org.dailycodework.dreamshops.exception.AlreadyExitsException;
@@ -21,10 +23,12 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/products")
+@Tag(name = "Products", description = "Operations about products")
 public class ProductController {
     private final IProductService productService;
 
     @GetMapping("/all")
+    @Operation(summary = "Get all products", description = "Get all products")
     public ResponseEntity<ApiResponse> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         List<ProductDto> convertedProducts=productService.getConvertedProducts(products);
@@ -32,6 +36,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{productId}/product")
+    @Operation(summary = "Get product by id", description = "Get product by id")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         try {
             Product product = productService.getProductById(productId);
@@ -44,6 +49,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
+    @Operation(summary = "Add product", description = "Add product")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
             Product theProduct = productService.addProduct(product);
@@ -56,6 +62,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/product/{productId}/update")
+    @Operation(summary = "Update product by id", description = "Update product by id")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable Long productId) {
 
         try {
@@ -68,6 +75,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/product/{productId}/delete")
+    @Operation(summary = "Delete product by id", description = "Delete product by id")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
             productService.deleteProduct(productId);
@@ -78,6 +86,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/by/brand-and-name")
+    @Operation(summary = "Get product by brand and name", description = "Get product by brand and name")
     public ResponseEntity<ApiResponse> getProductByBrandAndName(@RequestParam String brand, @RequestParam String name) {
 
         try {
@@ -93,6 +102,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/by/category-and-brand")
+    @Operation(summary = "Get product by category and brand", description = "Get product by category and brand")
     public  ResponseEntity<ApiResponse> getProductByCategoryAndBrand(@RequestParam String category, @RequestParam String brand) {
         try {
             List<Product> products = productService.getProductsByCategoryAndBrand(brand,category);
@@ -107,6 +117,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/{name}/products")
+    @Operation(summary = "Get product by name", description = "Get product by name")
     public ResponseEntity<ApiResponse> getProductByName(@PathVariable String name) {
         try{
             List<Product> products = productService.getProductByName(name);
@@ -121,6 +132,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/by-brand")
+    @Operation(summary = "Get product by brand", description = "Get product by brand")
     public ResponseEntity<ApiResponse> getProductByBrand(@RequestParam String brand) {
         try {
             List<Product> products = productService.getProductsByBrand(brand);
@@ -135,6 +147,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{category}/all/products")
+    @Operation(summary = "Get product by category", description = "Get product by category")
     public ResponseEntity<ApiResponse> getProductByCategory(@PathVariable String category) {
         try {
             List<Product> products = productService.getProductsByCategory(category);
@@ -149,6 +162,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/count/by-brand/and-name")
+    @Operation(summary = "Get product count by brand and name", description = "Get product count by brand and name")
     public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
         try {
            var productCount = productService.countProductsByBrandAndName(brand,name);

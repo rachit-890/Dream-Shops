@@ -1,5 +1,7 @@
 package org.dailycodework.dreamshops.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.dailycodework.dreamshops.request.LoginRequest;
@@ -22,12 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/auth")
+@Tag(name = "Authentication", description = "Operations about authentication")
 public class AuthController  {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
+    @Operation(summary = "Login", description = "Login")
     public ResponseEntity<ApiResponse> login( @Valid @RequestBody LoginRequest request) {
 
             Authentication authentication=authenticationManager
