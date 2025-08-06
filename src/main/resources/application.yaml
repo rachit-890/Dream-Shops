@@ -1,0 +1,43 @@
+# Spring Boot application configuration
+spring:
+  application:
+    name: dream-shops
+  # Datasource configuration for PostgreSQL
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/dream_shops
+    username: postgres
+    password: '@sql123'
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  # Configuration for file uploads
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+# Custom application properties
+api:
+  prefix: api/v1
+
+# Authentication and JWT token settings
+auth:
+  token:
+    expirationInMils: 3600000
+    jwtSecret: TWFuVGhpcyBpcyBhIHNlY3VyZVNlY3JldEtleTEyMzQ1Njc4OTA=
+
+# SpringDoc OpenAPI (Swagger) Configuration
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+

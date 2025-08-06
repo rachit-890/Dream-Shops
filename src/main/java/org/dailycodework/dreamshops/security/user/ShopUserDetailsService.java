@@ -1,6 +1,5 @@
 package org.dailycodework.dreamshops.security.user;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.dailycodework.dreamshops.model.User;
 import org.dailycodework.dreamshops.repository.UserRepository;
